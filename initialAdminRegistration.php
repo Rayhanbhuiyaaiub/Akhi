@@ -56,6 +56,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
         }
         if($flag==0)
         {
+            
             if(adminInsertion(getUserId(),$adminUserName,$adminName,$adminPassword,$adminPhone,$adminAddress))
             {
                 echo "<Script>alert('Congratulation Admin Inserted'); location.reload();</Script>";

@@ -138,15 +138,51 @@ function doubleSpCharChecker($hay,$needle)
 
 function getUserId()
 {
-    include "../akhi/database/data_access.php";
+    include "../akhiGit/database/data_access.php";
 
     $query = "SELECT * FROM `admin` order by id DESC limit 1";
     $result = mysqli_query($conn,$query);
     $nextAdminId="";
     if($row=mysqli_fetch_assoc($result))
     {
-        $lastAdminId=$row['admin_id'];
-        return $lastAdminId;
+        $lastAdminId=$row['admin_id']; 
+
+        $numberPart = intval(substr($lastAdminId,1,3));
+        $numberPart++;      
+        return 'A'. $numberPart;
     }
 }
+
+
+function adminInsertion($adminId,$adminUserName,$adminName,$adminPassword,$adminPhone,$adminAddress)
+{
+    include "../akhiGit/database/data_access.php";
+
+    $query="INSERT INTO `admin` (`id`, `admin_id`, `user_name`, `admin_name`, `admin_address`, `admin_password`) VALUES (NULL, '$adminId', '$adminUserName', '$adminName', '$adminAddress', '$adminPassword');";
+  
+  
+  
+    if(mysqli_query($conn,$query)) 
+    {
+        
+        $phoneInsertionQuery="INSERT INTO `admin_phone` (`id`, `admin_id`, `phone_number`) VALUES (NULL, '$adminId', '$adminPhone')";
+        if(mysqli_query($conn,$phoneInsertionQuery))
+        {
+        return true;
+        }
+        else
+        {
+        return false;
+        }
+    }
+    else
+    {
+        
+        return false;
+    }
+    return false;
+    }
+    
+
+
 ?>
