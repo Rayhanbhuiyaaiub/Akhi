@@ -15,6 +15,8 @@ include "database/data_access.php";
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
     <script>
+
+   
         $(document).ready(function () {
         $('select').selectize({
           sortField: 'text'
@@ -37,16 +39,18 @@ include "database/data_access.php";
         
         ?>
     </select>
-    <table class="redTable">
+    <table id="receiptTable" class="redTable">
+    <col width="25%" />
         <thead>
             <tr>
-                <td>Product Name</td>
+                <td >Product Name</td>
                 <td>Price</td>
                 <td>Quality Type</td>
                 <td>Quantity</td>
                 <td>Total Price</td>
-              
+            </tr>
                 <tbody>
+
                 <?php 
        $query = "SELECT * FROM `product` ";
        $result = mysqli_query($conn,$query);
@@ -56,11 +60,11 @@ include "database/data_access.php";
 
 
           <tr>
-              <td><?php echo $row['productName'];?></td>
+              <td ><?php echo $row['productName'];?></td>
               <td><?php echo $row['productPrice'];?></td>
               <td><?php echo $row['productQualityType'];?></td>
-              <td><input oninput="calculateTotal(<?php echo "'Q_". $row['productId']."',". $row['productPrice'] ; ?>)" type="number" name="<?php echo "Q_". $row['productId'];?>" id="<?php echo "Q_". $row['productId'];?>"></td>
-              <td><label  id="<?php echo "T_". $row['productId'];?>" name="<?php echo "T_". $row['productId'];?>">0</label></td>
+              <td colspan="1"><input oninput="calculateTotal(<?php echo "'Q_". $row['productId']."',". $row['productPrice'] ; ?>)" type="number" name="<?php echo "Q_". $row['productId'];?>" id="<?php echo "Q_". $row['productId'];?>"></td>
+              <td colspan="1"><label id="<?php echo "T_". $row['productId'];?>" name="<?php echo "T_". $row['productId'];?>">0</label></td>
               
               
           </tr>
@@ -71,29 +75,36 @@ include "database/data_access.php";
        
        ?>
         
-       <tr>
-           <td colspan="3"></td>
-           <td>Total quantity</td>
-           <td>Total Price</td>
+            <tr>
+                <td colspan="3"></td>
+                <td id="totalQuan">Total quantity</td>
+                <td id="totalPrice">Total Price</td>
 
-       </tr>
-                </tbody>
             </tr>
+
+
+            <tr>
+            
+            <td colspan="3"></td>
+            <td>Discount: </td>
+            <td> <input oninput="updateSubTotal()" type="number" name="disCount" id="disCount" value=0></td>
+            </tr>
+
+            <tr>
+            <td colspan="3"></td>
+            <td>SubTotal: </td>
+            <td> <label for="" id="subTotal">0</label></td>
+            </tr>
+
+
+            </tbody>
+            
         </thead>
+
+        <button type="submit">Generate PDF</button>
+
     </table>
     </form>
-        <script>
-            function calculateTotal(quantityId,price)
-            {
-                var quantityField = document.getElementById(quantityId);
-                var t_name=quantityId.substring(2);
-                t_name="T_"+t_name;
-                var totalField= document.getElementById(t_name);
-                var totalPrice=parseInt(quantityField.value)*parseInt(price);
-                totalField.innerHTML = totalPrice;
-               
-
-            }
-        </script>
+        <script src="script/receiptScript.js"></script>
 </body>
 </html>

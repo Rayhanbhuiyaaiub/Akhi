@@ -5,7 +5,16 @@ table.redTable {
     height: 200px;
     text-align: center;
     border-collapse: collapse;
+    table-layout: fixed;
+    column-width: initial;
+   
   }
+
+table.redTable td input
+{
+  width: 90%;
+}
+
   table.redTable td, table.redTable th {
     color: #F0E5D0;
     font-size: 24px;
@@ -17,6 +26,8 @@ table.redTable {
     font-size: 18px;
     font-weight: bold;
     color: black;
+    
+    
   }
   table.redTable tr:nth-child(even) {
     background: #F5C8BF;
