@@ -142,7 +142,7 @@ function getUserId()
 
     $query = "SELECT * FROM `admin` order by id DESC limit 1";
     $result = mysqli_query($conn,$query);
-    $nextAdminId="";
+   
     if($row=mysqli_fetch_assoc($result))
     {
         $lastAdminId=$row['admin_id']; 
@@ -152,7 +152,46 @@ function getUserId()
         return 'A'. $numberPart;
     }
 }
+function getProductId()
+{
+    include "../akhiGit/database/data_access.php";
 
+    $query = "SELECT * FROM `product` order by id DESC limit 1";
+    $result = mysqli_query($conn,$query);
+    
+    if($row=mysqli_fetch_assoc($result))
+    {
+        $lastProductId=$row['productId']; 
+
+        $numberPart = intval(substr($lastProductId,1,4));
+        $numberPart++;      
+        return 'P'. $numberPart;
+    }
+}
+
+
+function productInsert($productName,$productPrice,$productQualityType,$productDying)
+{
+    include "../akhiGit/database/data_access.php";
+    include "validation/functions.php";
+    
+    $productCount = doesProductExist();
+
+
+    if($productCount==0)
+    {
+        $query="INSERT INTO `product` (`ID`, `productName`, `productPrice`, `productQualityType`, `productId`, `dyingName`) VALUES (NULL, '$productName', '$productPrice', '$productQualityType', 'P1000', '$productDying')";
+        mysqli_query($conn, $query);
+    }
+    else
+    {
+        $productId=getProductId();
+        $query="INSERT INTO `product` (`ID`, `productName`, `productPrice`, `productQualityType`, `productId`, `dyingName`) VALUES (NULL, '$productName', '$productPrice', '$productQualityType', '$productId', '$productDying')";
+
+        mysqli_query($conn, $query);
+    }
+    
+}
 
 function adminInsertion($adminId,$adminUserName,$adminName,$adminPassword,$adminPhone,$adminAddress)
 {

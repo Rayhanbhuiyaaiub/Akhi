@@ -6,7 +6,7 @@
 function doesAdminExist()
 {
 
-    include "../akhi/database/data_access.php";
+    include "../AkhiGit/database/data_access.php";
 
     $query = "Select * from admin";
 
@@ -19,6 +19,15 @@ function doesAdminExist()
 }
 
 
+function doesProductExist()
+{
+    include "../AkhiGit/database/data_access.php";
+    $query= "Select * from product";
 
+    $result = mysqli_query($conn,$query);
+
+    return mysqli_num_rows($result);
+
+}
 
 ?>

@@ -33,5 +33,16 @@ echo doubleSpCharChecker("rayhan  "," ");
 
 getUserId();
 
+function doesProductExist()
+{
+    include "../AkhiGit/database/data_access.php";
+    $query= "Select * from product";
+
+    $result = mysqli_query($conn,$query);
+
+    return mysqli_num_rows($result);
+
+}
+doesProductExist();
 
 ?>
