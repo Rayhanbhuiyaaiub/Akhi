@@ -2,12 +2,18 @@
 
 function generatePdf()
 {
+    include ('vendor/autoload.php');
     $fileId="";
     $fileName="";
-    getNextFileInformation($fileId,$fileName);
-    echo $fileId;
-    echo $fileName;
-    
+    getNextFileInformation($fileName,$fileId);
+   
+    $mpdf = new \Mpdf\Mpdf([
+     'default_font' => 'bangla',
+     'mode' => 'utf-8'
+     ]);
+     $html=getHtml();
+     $mpdf->WriteHTML($html);
+     $mpdf->Output("pdf/".$fileName,'F');  
 }
 function getNextFileInformation(&$fileName,&$fileId)
 {
@@ -39,5 +45,173 @@ function getNextFileInformation(&$fileName,&$fileId)
     }
 
 }  
+function getHtml()
+{
 
+    $html="
+    
+     
+    <table  class=\"redTable\">
+    <col width=\"25%\" />
+        <thead>
+            <tr>
+                <td >Product Name</td>
+                <td>Price</td>
+                <td>Quality Type</td>
+                <td>Quantity</td>
+                <td>Total Price</td>
+            </tr>
+                <tbody>
+
+                
+
+          <tr>
+              <td > Power</td>
+              <td> 610</td>
+              <td> Bp</td>
+              <td colspan=\"1\"><input  type=\"number\" ></td>
+              <td colspan=\"1\"><label >0</label></td>
+              
+              
+          </tr>
+       
+       
+
+          <tr>
+              <td > Vowel</td>
+              <td> 450</td>
+              <td> vowel</td>
+              <td colspan=\"1\"><input  type=\"number\" ></td>
+              <td colspan=\"1\"><label >0</label></td>
+              
+              
+          </tr>
+       
+       
+
+          <tr>
+              <td > Vowel Plus</td>
+              <td> 440</td>
+              <td> vowel</td>
+              <td colspan=\"1\"><input type=\"number\" ></td>
+              <td colspan=\"1\"><label >0</label></td>
+              
+              
+          </tr>
+       
+       
+
+          <tr>
+              <td > Selfi</td>
+              <td> 530</td>
+              <td>BP</td>
+              <td colspan=\"1\"><input  type=\"number\"></td>
+              <td colspan=\"1\"><label  n>0</label></td>
+              
+              
+          </tr>
+       
+       
+
+          <tr>
+              <td > Talash</td>
+              <td> 430</td>
+              <td>vowel</td>
+              <td colspan=\"1\"><input  type=\"number\"  ></td>
+              <td colspan=\"1\"><label >0</label></td>
+              
+              
+          </tr>
+       
+       
+
+          <tr>
+              <td >Pakhi</td>
+              <td> 435</td>
+              <td>BP</td>
+              <td colspan=\"1\"><input  type=\"number\" ></td>
+              <td colspan=\"1\"><label >0</label></td>
+              
+              
+          </tr>
+       
+       
+
+          <tr>
+              <td >Rong</td>
+              <td>390</td>
+              <td>BP</td>
+              <td colspan=\"1\"><input  type=\"number\"  ></td>
+              <td colspan=\"1\"><label  >0</label></td>
+              
+              
+          </tr>
+       
+       
+
+          <tr>
+              <td >Deu</td>
+              <td>350</td>
+              <td>BP</td>
+              <td colspan=\"1\"><input  type=\"number\"  ></td>
+              <td colspan=\"1\"><label  >0</label></td>
+              
+              
+          </tr>
+       
+       
+
+          <tr>
+              <td > Pakhi</td>
+              <td> 430</td>
+              <td> without Bp</td>
+              <td colspan=\"1\"><input  type=\"number\"  ></td>
+              <td colspan=\"1\"><label  >0</label></td>
+              
+              
+          </tr>
+       
+       
+
+          <tr>
+              <td > Rong</td>
+              <td> 385</td>
+              <td> without Bp</td>
+              <td colspan=\"1\"><input  type=\"number\"  ></td>
+              <td colspan=\"1\"><label  >0</label></td>
+              
+              
+          </tr>
+       
+               
+            <tr>
+                <td colspan=\"3\"></td>
+                <td id=\"totalQuan\">Total quantity</td>
+                <td id=\"totalPrice\">Total Price</td>
+
+            </tr>
+
+
+            <tr>
+            
+            <td colspan=\"3\"></td>
+            <td>Discount: </td>
+            <td> <input  type=\"number\"  value=0></td>
+            </tr>
+
+            <tr>
+            <td colspan=\"3\"></td>
+            <td>SubTotal: </td>
+            <td> <label for=\"\" id=\"subTotal\">0</label></td>
+            </tr>
+
+
+            </tbody>
+            
+        </thead>
+
+
+    </table>";
+    return $html;
+}
 ?>
