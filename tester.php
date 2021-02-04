@@ -33,16 +33,34 @@ echo doubleSpCharChecker("rayhan  "," ");
 
 getUserId();
 
-function doesProductExist()
+function getNextFileInformation(&$fileName,&$fileId)
 {
-    include "../AkhiGit/database/data_access.php";
-    $query= "Select * from product";
+    
+    include "../akhiGit/database/data_access.php";
+    include "validation/functions.php";
+    $fileExsitCount= doesFileExist();
 
-    $result = mysqli_query($conn,$query);
+    if($fileExsitCount ==0)
+    {
+        $fileId="F100000";
+        $fileName=$fileId.".pdf";
+    }
+    else
+    {
+        $query = "SELECT * FROM `filetracker` order by Id DESC limit 1";
+        $result = mysqli_query($conn,$query);
+    
+   
+        if($row=mysqli_fetch_assoc($result))
+        {
+            $lastFileId=$row['file_Id']; 
 
-    return mysqli_num_rows($result);
+            $numberPart = intval(substr($lastFileId,1,3));
+            $numberPart++;      
+            return $numberPart;
+        }
+    }
 
-}
-doesProductExist();
-
+} 
+getNextFileInformation(); 
 ?>

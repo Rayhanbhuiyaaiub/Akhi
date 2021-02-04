@@ -84,8 +84,13 @@ function updateSubTotal()
     var totalPriceField = document.getElementById('totalPrice');
     var totalDiscountField = document.getElementById('disCount');
     var subTotalField = document.getElementById('subTotal');
-    var subTotal = parseInt(totalPriceField.innerText.substring(13))-parseInt(totalDiscountField.value);
-    console.log(totalDiscountField.value);
+    var discount=parseInt(totalDiscountField.value);
+    if (!discount)
+    {
+        discount=0;
+    }
+    var subTotal = parseInt(totalPriceField.innerText.substring(13))-discount;
+    
     subTotalField.innerText = subTotal;
 
 

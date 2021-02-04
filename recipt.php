@@ -1,5 +1,20 @@
 <?php
+
 include "database/data_access.php";
+include "validation/genaratePdf.php";
+if($_SERVER["REQUEST_METHOD"]=="POST")
+{
+    if(isset($_POST['btnPdf']))
+    {
+        generatePdf();
+       
+    }
+
+}
+
+
+
+
 
 
 ?>
@@ -25,7 +40,7 @@ include "database/data_access.php";
     </script>
 </head>
 <body>
-    <form action="">
+    <form action="" method="POST">
     <label>Product:</label>
     <select name="productList" id="" style=width:40%>
      <option value="" >Select a product</option>
@@ -101,9 +116,10 @@ include "database/data_access.php";
             
         </thead>
 
-        <button type="submit">Generate PDF</button>
 
     </table>
+    <button type="submit" name="btnPdf" id="btnPdf">Generate PDF</button>
+
     </form>
         <script src="script/receiptScript.js"></script>
 </body>
