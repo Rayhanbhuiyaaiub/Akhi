@@ -1,19 +1,26 @@
 <?php
 
-function generatePdf()
+function generatePdf($productInfoArray,$discount)
 {
     include ('vendor/autoload.php');
     $fileId="";
     $fileName="";
     getNextFileInformation($fileName,$fileId);
-   
+    
     $mpdf = new \Mpdf\Mpdf([
      'default_font' => 'bangla',
      'mode' => 'utf-8'
      ]);
-     $html=getHtml();
-     $mpdf->WriteHTML($html);
-     $mpdf->Output("pdf/".$fileName,'F');  
+
+    $tableCSS = file_get_contents('css/table.css');
+    $stylesheet = file_get_contents('css/style.css');
+    
+    $html=getHtml($productInfoArray,$discount);
+    
+    $mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
+    $mpdf->WriteHTML($tableCSS,\Mpdf\HTMLParserMode::HEADER_CSS);
+    $mpdf->WriteHTML($html);
+    $mpdf->Output("pdf/".$fileName,'F');
 }
 function getNextFileInformation(&$fileName,&$fileId)
 {
@@ -45,17 +52,31 @@ function getNextFileInformation(&$fileName,&$fileId)
     }
 
 }  
-function getHtml()
-{
+function getHtml($productInfoArray,$discount)
+{   
+    //Product Info Calculation 
+    
+    $totalPrice = 0;
+
+    foreach  ($productInfoArray as $product)
+    {
+        $totalPrice += $product[2];
+    }
+    
+
+    echo "<br>Total Price: ".$totalPrice."<br>";
+    
+    //
 
     $html="
     
-     
+    <h1 class=\"headLabel\"><img width=\"100px\" height=\"100px\" src=\"photo\power.jpg\"> আখি প্রিন্ট শাড়ি</h1>
+    
     <table  class=\"redTable\">
     <col width=\"25%\" />
         <thead>
             <tr>
-                <td >Product Name</td>
+                <td>Product Name</td>
                 <td>Price</td>
                 <td>Quality Type</td>
                 <td>Quantity</td>
@@ -202,7 +223,7 @@ function getHtml()
             <tr>
             <td colspan=\"3\"></td>
             <td>SubTotal: </td>
-            <td> <label for=\"\" id=\"subTotal\">0</label></td>
+            <td> <label for=\"\" id=\"subTotal\">".$totalPrice."</label></td>
             </tr>
 
 

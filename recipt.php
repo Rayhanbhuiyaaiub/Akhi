@@ -2,12 +2,50 @@
 
 include "database/data_access.php";
 include "validation/genaratePdf.php";
+
+$productArray = array();
+$caluculatedArray = array();
+
 if($_SERVER["REQUEST_METHOD"]=="POST")
 {
     if(isset($_POST['btnPdf']))
     {
-        generatePdf();
+        $query = "SELECT * FROM `product` ";
+        $result = mysqli_query($conn,$query);
+        while($row=mysqli_fetch_assoc($result))
+        {
+            $productPrice = $row['productPrice'];
+            $productId = $row['productId'];
+
+            array_push($productArray,array($productId,$productPrice));
+        }
+
+        foreach ($productArray as $value) {
+            
+            
+            $price = $value[1];
+            $quantity = $_POST['Q_'.$value[0]];
+            $totalPrice = intval($price)*intval($quantity);
+
+
+            array_push($caluculatedArray,array($price,$quantity,$totalPrice));
+
+
+
+            
+          }
+
+
+        
+
+        
+
+        $discount = $_POST['disCount'];
+
+
+       generatePdf($caluculatedArray,$discount);
        
+
     }
 
 }
@@ -78,7 +116,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
               <td ><?php echo $row['productName'];?></td>
               <td><?php echo $row['productPrice'];?></td>
               <td><?php echo $row['productQualityType'];?></td>
-              <td colspan="1"><input oninput="calculateTotal(<?php echo "'Q_". $row['productId']."',". $row['productPrice'] ; ?>)" type="number" name="<?php echo "Q_". $row['productId'];?>" id="<?php echo "Q_". $row['productId'];?>"></td>
+              <td colspan="1"><input oninput="calculateTotal(<?php echo "'Q_". $row['productId']."',". $row['productPrice'] ; ?>)" type="number" name="<?php echo "Q_". $row['productId'];?>" id="<?php echo "Q_". $row['productId'];?>" value="0"></td>
               <td colspan="1"><label id="<?php echo "T_". $row['productId'];?>" name="<?php echo "T_". $row['productId'];?>">0</label></td>
               
               
