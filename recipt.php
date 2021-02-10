@@ -4,10 +4,14 @@ include "database/data_access.php";
 include "validation/genaratePdf.php";
 
 $productArray = array();
-$caluculatedArray = array();
+$totalPrice = 0;
+$discount = 0;
+$totalQuantity= 0;
+$subTotal= 0;
 
 if($_SERVER["REQUEST_METHOD"]=="POST")
 {
+
     if(isset($_POST['btnPdf']))
     {
         $query = "SELECT * FROM `product` ";
@@ -17,33 +21,35 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
             $productPrice = $row['productPrice'];
             $productId = $row['productId'];
 
-            array_push($productArray,array($productId,$productPrice));
+            $productQuantity = $_POST["Q_".$productId];
+
+            $tempArray['id'] = $productId;
+            $tempArray['price'] = $productPrice;
+            $tempArray['quantity'] = $productQuantity;
+            $tempArray['totalPrice'] = intval($productPrice)*intval($productQuantity);
+
+            $totalPrice += $tempArray['totalPrice'];
+            $totalQuantity += $tempArray['quantity'];
+
+            array_push($productArray,$tempArray);
+
+            
         }
 
-        foreach ($productArray as $value) {
-            
-            
-            $price = $value[1];
-            $quantity = $_POST['Q_'.$value[0]];
-            $totalPrice = intval($price)*intval($quantity);
-
-
-            array_push($caluculatedArray,array($price,$quantity,$totalPrice));
-
-
-
-            
-          }
-
 
         
 
-        
+    
 
         $discount = $_POST['disCount'];
 
+        $subTotal = $totalPrice-$discount;
+        
 
-       generatePdf($caluculatedArray,$discount);
+
+
+
+       generatePdf($productArray,$discount);
        
 
     }
@@ -107,6 +113,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
                 <?php 
        $query = "SELECT * FROM `product` ";
        $result = mysqli_query($conn,$query);
+       $productCounter = 0;
        while($row=mysqli_fetch_assoc($result))
        {
         ?>
@@ -116,22 +123,48 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
               <td ><?php echo $row['productName'];?></td>
               <td><?php echo $row['productPrice'];?></td>
               <td><?php echo $row['productQualityType'];?></td>
-              <td colspan="1"><input oninput="calculateTotal(<?php echo "'Q_". $row['productId']."',". $row['productPrice'] ; ?>)" type="number" name="<?php echo "Q_". $row['productId'];?>" id="<?php echo "Q_". $row['productId'];?>" value="0"></td>
-              <td colspan="1"><label id="<?php echo "T_". $row['productId'];?>" name="<?php echo "T_". $row['productId'];?>">0</label></td>
+              <td colspan="1"><input oninput="calculateTotal(<?php echo "'Q_". $row['productId']."',". $row['productPrice'] ; ?>)" type="number" name="<?php echo "Q_". $row['productId'];?>" id="<?php echo "Q_". $row['productId']; ?>" 
+                 
+              value="<?php 
+              if(!empty($productArray[$productCounter]['quantity']))
+              {
+                  echo intval($productArray[$productCounter]['quantity']);
+              }
+              else
+              {
+                  echo intval("0");
+              }
+              ?>">
+              </td>
+              
+              
+              
+              <td colspan="1"><label id="<?php echo "T_". $row['productId'];?>" name="<?php echo "T_". $row['productId'];?>">
+              
+              <?php 
+              if(!empty($productArray[$productCounter]['totalPrice']))
+              {
+                  echo intval($productArray[$productCounter]['totalPrice']);
+              }
+              else
+              {
+                  echo intval("0");
+              }
+              
+              ?></label></td>
               
               
           </tr>
-       
        <?php
-       
+        $productCounter++;
         }
        
        ?>
         
             <tr>
                 <td colspan="3"></td>
-                <td id="totalQuan">Total quantity</td>
-                <td id="totalPrice">Total Price</td>
+                <td id="totalQuan">Total quantity: <?=$totalQuantity?></td>
+                <td id="totalPrice">Total Price: <?=$totalPrice?></td>
 
             </tr>
 
@@ -140,13 +173,13 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
             
             <td colspan="3"></td>
             <td>Discount: </td>
-            <td> <input oninput="updateSubTotal()" type="number" name="disCount" id="disCount" value=0></td>
+            <td> <input oninput="updateSubTotal()" type="number" name="disCount" id="disCount" value="<?=$discount?>"></td>
             </tr>
 
             <tr>
             <td colspan="3"></td>
             <td>SubTotal: </td>
-            <td> <label for="" id="subTotal">0</label></td>
+            <td> <label for="" id="subTotal"><?=$subTotal?></label></td>
             </tr>
 
 
