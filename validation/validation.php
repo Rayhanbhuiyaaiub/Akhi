@@ -138,7 +138,7 @@ function doubleSpCharChecker($hay,$needle)
 
 function getUserId()
 {
-    include "../akhiGit/database/data_access.php";
+    include "../AkhiGit/database/data_access.php";
 
     $query = "SELECT * FROM `admin` order by id DESC limit 1";
     $result = mysqli_query($conn,$query);
@@ -154,7 +154,7 @@ function getUserId()
 }
 function getProductId()
 {
-    include "../akhiGit/database/data_access.php";
+    include "../AkhiGit/database/data_access.php";
 
     $query = "SELECT * FROM `product` order by id DESC limit 1";
     $result = mysqli_query($conn,$query);
@@ -172,7 +172,7 @@ function getProductId()
 
 function productInsert($productName,$productPrice,$productQualityType,$productDying)
 {
-    include "../akhiGit/database/data_access.php";
+    include "../AkhiGit/database/data_access.php";
     include "validation/functions.php";
     
     $productCount = doesProductExist();
@@ -195,7 +195,7 @@ function productInsert($productName,$productPrice,$productQualityType,$productDy
 
 function adminInsertion($adminId,$adminUserName,$adminName,$adminPassword,$adminPhone,$adminAddress)
 {
-    include "../akhiGit/database/data_access.php";
+    include "../AkhiGit/database/data_access.php";
 
     $query="INSERT INTO `admin` (`id`, `admin_id`, `user_name`, `admin_name`, `admin_address`, `admin_password`) VALUES (NULL, '$adminId', '$adminUserName', '$adminName', '$adminAddress', '$adminPassword');";
   
